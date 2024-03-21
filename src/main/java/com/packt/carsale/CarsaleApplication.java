@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.packt.carsale.domain.AppUser;
+import com.packt.carsale.domain.AppUserRepository;
 import com.packt.carsale.domain.Car;
 import com.packt.carsale.domain.CarRepository;
 import com.packt.carsale.domain.Owner;
@@ -18,10 +20,12 @@ public class CarsaleApplication implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(CarsaleApplication.class);
 	private final CarRepository repository;
 	private final OwnerRepository orepository;
+	private final AppUserRepository urepository;
 
-	public CarsaleApplication(CarRepository repository, OwnerRepository orepository) {
+	public CarsaleApplication(CarRepository repository, OwnerRepository orepository, AppUserRepository urepository) {
 		this.repository = repository;
 		this.orepository = orepository;
+		this.urepository = urepository;
 	}
 
 	public static void main(String[] args) {
@@ -41,6 +45,12 @@ public class CarsaleApplication implements CommandLineRunner {
 		for (Car car : repository.findAll()) {
 			logger.info("brand: {}, model: {}", car.getBrand(), car.getModel());
 		}
-	}
 
+		// Username: user, password: user
+		urepository.save(new AppUser("user",
+				"$2a$10$NVM0n8ElaRgg7zWO1CxUdei7vWoPg91Lz2aYavh9.f9q0e4bRadue", "USER"));
+		// Username: admin, password: admin
+		urepository.save(new AppUser("admin",
+				"$2a$10$8cjz47bjbR4Mn8GMg9IZx.vyjhLXR/SKKMSZ9.mP9vpMu0ssKi8GW", "ADMIN"));
+	}
 }
