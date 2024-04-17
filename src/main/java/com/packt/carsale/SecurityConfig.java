@@ -59,19 +59,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // http.csrf((csrf) -> csrf.disable())
+        //         .cors(t -> {})
+        //         .authorizeHttpRequests((authoriseHttpRequests) -> authoriseHttpRequests
+        //                 .anyRequest().permitAll());
         http.csrf((csrf) -> csrf.disable())
-                .cors(t -> {})
-                .sessionManagement((sm) -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authoriseHttpRequests) -> authoriseHttpRequests
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll().anyRequest().authenticated())
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((eh) -> eh.authenticationEntryPoint(exceptionHandler));
+        .cors(t -> {})
+        .sessionManagement((sm) ->
+        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests((authoriseHttpRequests) -> authoriseHttpRequests
+        .requestMatchers(HttpMethod.POST,
+        "/login").permitAll().anyRequest().authenticated())
+        .addFilterBefore(authenticationFilter,
+        UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling((eh) -> eh.authenticationEntryPoint(exceptionHandler));
         return http.build();
 
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("*"));
